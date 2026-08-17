@@ -11,7 +11,6 @@
 扩展面板里**没有** Install from VSIX，不要去找那个菜单。用终端：
 
 ```bash
-git clone git@github.com:Satosh1Cat/starcomplete.git
 cd starcomplete
 npm install
 npm test
