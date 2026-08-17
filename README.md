@@ -1,43 +1,54 @@
 # StarComplete
 
-给 VS Code 已有的 IntelliSense **重新排序并打星标**。不聊天，不改仓库，不训练模型。
+[中文](./README.md) | [English](./README.en.md)
 
-仓库在 `/Users/macbookpro/starcomplete`，不是 NewIdea。
+给编辑器已有的 IntelliSense **重新排序并打星标**。不聊天，不改仓库，不训练模型。
 
-## 安装并跑通评测
+仓库：https://github.com/Satosh1Cat/starcomplete
 
-在终端执行：
+## 安装（Cursor / Mac）
+
+扩展面板里**没有** Install from VSIX，不要去找那个菜单。用终端：
 
 ```bash
-cd /Users/macbookpro/starcomplete
+git clone git@github.com:Satosh1Cat/starcomplete.git
+cd starcomplete
 npm install
 npm test
 npm run build
 ```
 
-`npm test` 必须通过：ranker 单测 + 离线 Top-1 / Top-3 高于原始候选顺序。
-
-## 在 Cursor 里看星标补全（Mac）
-
-扩展面板里没有 **Install from VSIX**，不要去找。用终端装：
+装插件（仓库里已打好包）：
 
 ```bash
-/Applications/Cursor.app/Contents/Resources/app/bin/cursor --install-extension /Users/macbookpro/starcomplete/starcomplete-0.1.1.vsix
+/Applications/Cursor.app/Contents/Resources/app/bin/cursor --install-extension ./starcomplete-0.1.1.vsix
 ```
 
-装完后按 **⌘⇧P**，运行 `Developer: Reload Window`。
+然后按 **⌘⇧P**，运行 `Developer: Reload Window`。右下角应出现 **★ StarComplete**。
 
-然后：
+更细的点击步骤见 [打开方式.md](./打开方式.md)。
 
-1. 打开 `/Users/macbookpro/starcomplete/extension/examples/playground.ts`。
-2. 把光标放在 `console.` 的点后面，按 **Control+Space**（Control，不是 Command）。
-3. 列表顶部应出现带 **★ StarComplete** 的项。
+## 怎么试
 
-扩展装不上时，用浏览器打开 `/Users/macbookpro/starcomplete/playground/index.html`。
+1. 打开 `extension/examples/playground.ts`
+2. 如果已经是 `console.log();`，删掉 `log()`，只留 `console.`
+3. 光标放在点右边：`console.|`
+4. 按 **Control+Space**（键盘左下角 Control，不是 Command）
+5. 列表最上面应出现 **★ log**、**★ error**、**★ warn**
 
-开发调试仍可用 F5：**Run StarComplete**（会先 `npm run build`，再开扩展开发窗口）。命令面板可跑 **StarComplete: Show extracted context**。
+只看到 `assert` / `clear` / `count`、名字前没有 ★，那是 TypeScript 自带补全，还没成功。
 
-## 文档（先读这三页）
+装不上扩展时，用浏览器打开 `playground/index.html`。
+
+## 评测
+
+```bash
+npm test
+```
+
+必须通过：ranker 单测 + 离线 Top-1 / Top-3 高于原始候选顺序。没有 fixtures 不准说「更智能」。
+
+## 文档
 
 1. [docs/00-problem.md](./docs/00-problem.md) — 问题是排序，不是「AI 写代码」
 2. [docs/03-prd-mvp.md](./docs/03-prd-mvp.md) — MVP 规格
