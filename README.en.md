@@ -6,39 +6,19 @@ Rerank existing IntelliSense and **star** the likely items. No chat, no repo edi
 
 Repo: https://github.com/Satosh1Cat/starcomplete
 
-## Install (Cursor / Mac)
+## What it is
 
-The Extensions panel has **no** Install from VSIX. Do not look for that menu. Use the terminal:
+The language service already lists legal candidates. StarComplete does one job: using the current file, imports, receiver, and common API frequencies, it **stars and pins** the most likely items at the top.
+
+TypeScript / JavaScript (including TSX / JSX). Local only. No network.
+
+## Clone
 
 ```bash
-git clone git@github.com:Satosh1Cat/starcomplete.git
+git clone https://github.com/Satosh1Cat/starcomplete.git
 cd starcomplete
 npm install
-npm test
-npm run build
 ```
-
-Install the extension (a VSIX is already in the repo):
-
-```bash
-/Applications/Cursor.app/Contents/Resources/app/bin/cursor --install-extension ./starcomplete-0.1.1.vsix
-```
-
-Then press **⌘⇧P** and run `Developer: Reload Window`. The bottom-right corner should show **★ StarComplete**.
-
-More click-by-click steps: [打开方式.md](./打开方式.md).
-
-## Try it
-
-1. Open `extension/examples/playground.ts`
-2. If the line is already `console.log();`, delete `log()` and leave `console.`
-3. Put the caret to the right of the dot: `console.|`
-4. Press **Control+Space** (Control in the bottom-left, not Command)
-5. The top of the list should show **★ log**, **★ error**, **★ warn**
-
-If you only see `assert` / `clear` / `count` with no ★, that is stock TypeScript completion. It is not success.
-
-If the extension will not install, open `playground/index.html` in a browser.
 
 ## Eval
 
@@ -46,12 +26,63 @@ If the extension will not install, open `playground/index.html` in a browser.
 npm test
 ```
 
-Must pass: ranker unit tests, plus offline Top-1 / Top-3 above the original candidate order. No fixtures, no claim of “smarter.”
+Must pass: ranker unit tests, plus offline Top-1 / Top-3 **above** the original candidate order in the fixtures. No fixtures, no claim of “smarter.”
+
+Build the extension:
+
+```bash
+npm run build
+```
+
+## Install the VSIX
+
+The repo root ships `starcomplete-0.1.1.vsix`. If it is missing after a clone, build and package:
+
+```bash
+npm run build
+cd extension
+npx --yes @vscode/vsce package
+```
+
+Then install in **VS Code** or **Cursor**:
+
+1. Command Palette (macOS: ⌘⇧P, Windows / Linux: Ctrl+Shift+P)
+2. Run **Extensions: Install from VSIX…**
+3. Pick `starcomplete-0.1.1.vsix` (repo root or `extension/`)
+
+CLI (`code` or `cursor` on your PATH):
+
+```bash
+code --install-extension ./starcomplete-0.1.1.vsix
+# or
+cursor --install-extension ./starcomplete-0.1.1.vsix
+```
+
+Open the Command Palette and run `Developer: Reload Window`. The status bar should show **★ StarComplete**.
+
+## Try it
+
+**In the editor (extension installed):**
+
+1. Open `extension/examples/playground.ts`
+2. Put the caret to the right of the dot in `console.`
+3. Trigger completions: Ctrl+Space (on macOS that is Control, not Command)
+4. The top of the list should show **★ log**, **★ error**, **★ warn**
+
+If you only see `assert` / `clear` / `count` with no ★, that is the stock language-service order. The extension is not active.
+
+**In a browser (no extension):** open `playground/index.html`.
 
 ## Docs
 
 1. [docs/00-problem.md](./docs/00-problem.md) — the problem is ranking, not “AI writes code”
-2. [docs/03-prd-mvp.md](./docs/03-prd-mvp.md) — MVP spec
-3. [docs/04-metrics-eval.md](./docs/04-metrics-eval.md) — eval gate
+2. [docs/01-users-jtbd.md](./docs/01-users-jtbd.md) — users and jobs-to-be-done
+3. [docs/02-competitive.md](./docs/02-competitive.md) — competitors
+4. [docs/03-prd-mvp.md](./docs/03-prd-mvp.md) — MVP spec
+5. [docs/04-metrics-eval.md](./docs/04-metrics-eval.md) — eval gate
+6. [docs/05-layer-map.md](./docs/05-layer-map.md) — layer map
+7. [docs/06-roadmap.md](./docs/06-roadmap.md) — roadmap
 
-Also: users / competitors / [layer map](./docs/05-layer-map.md) / roadmap.
+## License
+
+[MIT](./LICENSE)
