@@ -1,0 +1,12 @@
+{
+  "id": "promise-then",
+  "fileText": "const promise = fetch(url);\npromise.\n",
+  "cursorAt": "promise.",
+  "expected": "then",
+  "candidates": [
+    { "label": "catch", "kind": "Method" },
+    { "label": "constructor", "kind": "Property" },
+    { "label": "finally", "kind": "Method" },
+    { "label": "then", "kind": "Method" }
+  ]
+}

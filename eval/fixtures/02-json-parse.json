@@ -1,0 +1,12 @@
+{
+  "id": "json-parse",
+  "fileText": "const raw = '{}';\nconst once = JSON.parse(raw);\nJSON.\n",
+  "cursorAt": "JSON.",
+  "expected": "parse",
+  "candidates": [
+    { "label": "raw", "kind": "Property" },
+    { "label": "prototype", "kind": "Property" },
+    { "label": "stringify", "kind": "Method" },
+    { "label": "parse", "kind": "Method" }
+  ]
+}

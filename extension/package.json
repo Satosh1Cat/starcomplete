@@ -1,0 +1,41 @@
+{
+  "name": "starcomplete",
+  "displayName": "StarComplete",
+  "description": "Classic IntelliCode-style starred reranking for TypeScript and JavaScript",
+  "version": "0.1.1",
+  "publisher": "starcomplete",
+  "private": true,
+  "extensionKind": ["ui", "workspace"],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascriptreact"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "starcomplete.showContext",
+        "title": "StarComplete: Show extracted context"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --sourcemap",
+    "watch": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.25.8"
+  },
+  "dependencies": {
+    "@starcomplete/ranker": "0.1.0"
+  }
+}

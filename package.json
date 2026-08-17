@@ -1,0 +1,19 @@
+{
+  "name": "starcomplete",
+  "private": true,
+  "description": "Classic IntelliCode-style starred reranking — learn architecture by shipping as a PM",
+  "workspaces": [
+    "ranker",
+    "extension",
+    "eval"
+  ],
+  "scripts": {
+    "build": "npm run build -w starcomplete",
+    "test": "npm test -w @starcomplete/ranker && npm run score -w @starcomplete/eval",
+    "eval": "npm run score -w @starcomplete/eval"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.5",
+    "typescript": "^5.8.3"
+  }
+}

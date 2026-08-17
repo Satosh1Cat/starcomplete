@@ -1,0 +1,16 @@
+{
+  "id": "imported-readFile",
+  "fileText": "import { readFile, writeFile } from \"fs/promises\";\nimport fs from \"fs\";\nfs.\n",
+  "cursorAt": "fs.",
+  "expected": "readFile",
+  "candidates": [
+    { "label": "access", "kind": "Method" },
+    { "label": "appendFile", "kind": "Method" },
+    { "label": "chmod", "kind": "Method" },
+    { "label": "copyFile", "kind": "Method" },
+    { "label": "existsSync", "kind": "Method" },
+    { "label": "readFile", "kind": "Method" },
+    { "label": "unlink", "kind": "Method" },
+    { "label": "writeFile", "kind": "Method" }
+  ]
+}

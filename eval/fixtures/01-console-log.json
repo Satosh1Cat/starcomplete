@@ -1,0 +1,20 @@
+{
+  "id": "console-log",
+  "fileText": "function handle() {\n  console.\n}\n",
+  "cursorAt": "  console.",
+  "expected": "log",
+  "candidates": [
+    { "label": "assert", "kind": "Method" },
+    { "label": "clear", "kind": "Method" },
+    { "label": "count", "kind": "Method" },
+    { "label": "debug", "kind": "Method" },
+    { "label": "dir", "kind": "Method" },
+    { "label": "error", "kind": "Method" },
+    { "label": "group", "kind": "Method" },
+    { "label": "info", "kind": "Method" },
+    { "label": "log", "kind": "Method" },
+    { "label": "table", "kind": "Method" },
+    { "label": "time", "kind": "Method" },
+    { "label": "warn", "kind": "Method" }
+  ]
+}

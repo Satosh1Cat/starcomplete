@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>StarComplete playground</title>
+  <style>
+    body { font: 14px/1.4 -apple-system, sans-serif; max-width: 720px; margin: 24px auto; padding: 0 16px; }
+    textarea { width: 100%; height: 180px; font: 13px/1.4 ui-monospace, monospace; }
+    li { margin: 4px 0; }
+    .star { color: #b45309; }
+    .muted { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>StarComplete playground</h1>
+  <p class="muted">扩展装不上时用这个。点到 <code>console.</code> / <code>JSON.</code> / <code>items.</code> / <code>app.</code> 后面即可。</p>
+  <textarea id="code">import { readFile, writeFile } from "fs/promises";
+
+const items = [1, 2, 3];
+const app = { use() {}, get() {}, post() {}, listen() {} };
+
+export async function demo() {
+  console.
+  JSON.
+  items.
+  app.
+}
+</textarea>
+  <ul id="out"></ul>
+  <script>
+    const RECEIVER_PRIORS = {
+      console: { log: 10, error: 7, warn: 5, debug: 4, info: 3, table: 2, time: 2, assert: 1 },
+      json: { parse: 9, stringify: 9 },
+      math: { max: 6, min: 6, floor: 5, ceil: 4, round: 4, random: 5, abs: 4 },
+      object: { keys: 8, values: 6, entries: 5, assign: 4, fromEntries: 3 },
+      promise: { all: 6, resolve: 5, reject: 4, race: 3, allSettled: 3 },
+      fs: { readFile: 8, writeFile: 7, readFileSync: 4, writeFileSync: 4, promises: 5, existsSync: 3 },
+      path: { join: 9, resolve: 6, dirname: 5, basename: 4, extname: 3 },
+      app: { use: 9, get: 8, post: 7, listen: 6, put: 4, delete: 4 },
+      res: { json: 9, status: 8, send: 7, end: 3 },
+      req: { body: 8, params: 7, query: 7, headers: 4 },
+      document: { getElementById: 9, querySelector: 8, querySelectorAll: 6, createElement: 7 },
+      process: { env: 9, cwd: 4, exit: 4, argv: 3 },
+    };
+    const ARRAY_PRIORS = { map: 10, filter: 9, forEach: 8, find: 8, reduce: 7, includes: 6, push: 6, length: 5, slice: 5, some: 5, every: 4, findIndex: 4, flatMap: 4, sort: 3, join: 3, concat: 2 };
+    const PROMISE_INSTANCE_PRIORS = { then: 9, catch: 7, finally: 5 };
+    const ARRAY_RECEIVER = /^(arr|array|items|itemList|list|results|rows|ids|values|elements|nodes|xs|ys)$/i;
+    const PROMISE_RECEIVER = /^(p|promise|pending|ready)$/i;
+    const POOL = {
+      console: ["log", "error", "warn", "debug", "info", "table", "time", "assert", "clear", "dir"],
+      json: ["parse", "stringify"],
+      items: Object.keys(ARRAY_PRIORS),
+      app: ["use", "get", "post", "listen", "put", "delete"],
+    };
+
+    function priorFor(receiver, label) {
+      if (!receiver) return 0;
+      const table = RECEIVER_PRIORS[receiver.toLowerCase()];
+      if (table && table[label] !== undefined) return table[label];
+      if (ARRAY_RECEIVER.test(receiver) && ARRAY_PRIORS[label] !== undefined) return ARRAY_PRIORS[label];
+      if (PROMISE_RECEIVER.test(receiver) && PROMISE_INSTANCE_PRIORS[label] !== undefined) return PROMISE_INSTANCE_PRIORS[label];
+      return 0;
+    }
+
+    function extractImports(text) {
+      const names = new Set();
+      for (const match of text.matchAll(/import\s+(?:type\s+)?([\s\S]*?)\s+from\s+['"][^'"]+['"]/g)) {
+        const clause = match[1].trim();
+        const named = clause.match(/^\{([^}]+)\}$/);
+        if (named) for (const part of named[1].split(",")) {
+          const bit = part.trim().match(/^(?:type\s+)?([A-Za-z_$][\w$]*)(?:\s+as\s+([A-Za-z_$][\w$]*))?$/);
+          if (bit) names.add(bit[2] ?? bit[1]);
+        } else if (/^[A-Za-z_$][\w$]*$/.test(clause)) names.add(clause);
+      }
+      return [...names];
+    }
+
+    function extractFeatures(fileText, cursorOffset) {
+      const lineStart = fileText.lastIndexOf("\n", cursorOffset - 1) + 1;
+      const linePrefix = fileText.slice(lineStart, cursorOffset);
+      const member = linePrefix.match(/([A-Za-z_$][\w$]*)\s*\.\s*([A-Za-z_$][\w$]*)?$/);
+      const receiver = member ? member[1] : null;
+      const typedMember = member ? member[2] ?? "" : "";
+      return { prefix: typedMember, receiver, typedMember, imports: extractImports(fileText), identifierCounts: {}, linePrefix };
+    }
+
+    function rank(candidates, features) {
+      const scored = candidates.map((candidate, originalIndex) => {
+        const label = candidate.label;
+        const reasons = [];
+        let score = 0;
+        const typed = features.typedMember || features.prefix;
+        if (typed) {
+          const lower = label.toLowerCase();
+          const needle = typed.toLowerCase();
+          if (lower.startsWith(needle)) { score += 2.5; reasons.push("prefix"); }
+          else if (lower.includes(needle)) score += 0.5;
+        }
+        if (features.imports.includes(label)) { score += 3; reasons.push("imported"); }
+        const prior = priorFor(features.receiver, label);
+        if (prior > 0) { score += prior * 0.45; reasons.push("common API"); }
+        score -= originalIndex * 0.001;
+        return { ...candidate, score, reasons, originalIndex, starred: false };
+      });
+      scored.sort((a, b) => b.score - a.score || a.originalIndex - b.originalIndex);
+      let starred = 0;
+      for (const item of scored) {
+        if (starred < 3 && item.score >= 2.5) { item.starred = true; starred += 1; }
+      }
+      return scored;
+    }
+
+    const code = document.getElementById("code");
+    const out = document.getElementById("out");
+    function render() {
+      const features = extractFeatures(code.value, code.selectionStart);
+      const labels = POOL[features.receiver] || POOL[features.receiver && features.receiver.toLowerCase()] || [];
+      const ranked = rank(labels.map((label) => ({ label, kind: "method" })), features);
+      out.innerHTML = ranked.length === 0
+        ? "<li class='muted'>把光标放到 console. / JSON. / items. / app. 后面</li>"
+        : ranked.map((item) => item.starred
+          ? `<li><span class="star">★ StarComplete</span> <b>${item.label}</b> <span class="muted">${item.reasons.join(" · ")}</span></li>`
+          : `<li>${item.label}</li>`).join("");
+    }
+    code.addEventListener("click", render);
+    code.addEventListener("keyup", render);
+    code.addEventListener("input", render);
+    const at = code.value.indexOf("console.") + "console.".length;
+    code.selectionStart = code.selectionEnd = at;
+    render();
+  </script>
+</body>
+</html>

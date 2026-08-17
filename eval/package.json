@@ -1,0 +1,12 @@
+{
+  "name": "@starcomplete/eval",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "score": "tsx src/score.ts"
+  },
+  "dependencies": {
+    "@starcomplete/ranker": "0.1.0"
+  }
+}

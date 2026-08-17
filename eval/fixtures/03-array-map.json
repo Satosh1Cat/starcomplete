@@ -1,0 +1,27 @@
+{
+  "id": "array-map",
+  "fileText": "const items = [1, 2, 3];\nitems.\n",
+  "cursorAt": "items.",
+  "expected": "map",
+  "candidates": [
+    { "label": "concat", "kind": "Method" },
+    { "label": "copyWithin", "kind": "Method" },
+    { "label": "entries", "kind": "Method" },
+    { "label": "every", "kind": "Method" },
+    { "label": "fill", "kind": "Method" },
+    { "label": "filter", "kind": "Method" },
+    { "label": "find", "kind": "Method" },
+    { "label": "forEach", "kind": "Method" },
+    { "label": "includes", "kind": "Method" },
+    { "label": "join", "kind": "Method" },
+    { "label": "keys", "kind": "Method" },
+    { "label": "length", "kind": "Property" },
+    { "label": "map", "kind": "Method" },
+    { "label": "pop", "kind": "Method" },
+    { "label": "push", "kind": "Method" },
+    { "label": "reduce", "kind": "Method" },
+    { "label": "slice", "kind": "Method" },
+    { "label": "toLocaleString", "kind": "Method" },
+    { "label": "toString", "kind": "Method" }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@starcomplete/ranker",
+  "version": "0.1.0",
+  "description": "Pure-function IntelliSense reranker",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "test": "tsx --test src/rank.test.ts src/features.test.ts"
+  }
+}

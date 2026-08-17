@@ -1,0 +1,15 @@
+{
+  "id": "cooccur-status",
+  "fileText": "function sendError(res) {\n  res.status(404);\n  res.\n}\n",
+  "cursorAt": "  res.",
+  "expected": "status",
+  "candidates": [
+    { "label": "append", "kind": "Method" },
+    { "label": "end", "kind": "Method" },
+    { "label": "json", "kind": "Method" },
+    { "label": "locals", "kind": "Property" },
+    { "label": "send", "kind": "Method" },
+    { "label": "status", "kind": "Method" },
+    { "label": "write", "kind": "Method" }
+  ]
+}

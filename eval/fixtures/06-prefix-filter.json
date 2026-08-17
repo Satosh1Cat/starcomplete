@@ -1,0 +1,14 @@
+{
+  "id": "prefix-filter",
+  "fileText": "const items = users;\nitems.fil\n",
+  "cursorAt": "items.fil",
+  "expected": "filter",
+  "candidates": [
+    { "label": "fill", "kind": "Method" },
+    { "label": "filter", "kind": "Method" },
+    { "label": "find", "kind": "Method" },
+    { "label": "findIndex", "kind": "Method" },
+    { "label": "flat", "kind": "Method" },
+    { "label": "flatMap", "kind": "Method" }
+  ]
+}

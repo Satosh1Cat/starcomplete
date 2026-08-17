@@ -1,0 +1,19 @@
+{
+  "id": "express-use",
+  "fileText": "import express from \"express\";\nconst app = express();\napp.\n",
+  "cursorAt": "app.",
+  "expected": "use",
+  "candidates": [
+    { "label": "all", "kind": "Method" },
+    { "label": "delete", "kind": "Method" },
+    { "label": "engine", "kind": "Method" },
+    { "label": "get", "kind": "Method" },
+    { "label": "listen", "kind": "Method" },
+    { "label": "param", "kind": "Method" },
+    { "label": "path", "kind": "Property" },
+    { "label": "post", "kind": "Method" },
+    { "label": "render", "kind": "Method" },
+    { "label": "set", "kind": "Method" },
+    { "label": "use", "kind": "Method" }
+  ]
+}
